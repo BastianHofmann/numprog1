@@ -291,22 +291,25 @@ public class Gleitpunktzahl {
                 //System.out.println(mantisse+" - " +maxMantisse);
                 //System.out.println(this.toString());
                 //System.out.println(maxMantisse);
-                /*double m = maxMantisse;
+                double m = maxMantisse;
                 m = m/mantisse;
+                //damit am Ende richtig gerundet wird
                 m = Math.log(m) / Math.log(0.5);
                 //m = m / Math.log(0.5);
-                int k = (int)Math.ceil(m);
-                
+                int x = (int)Math.ceil(m);
+                //System.out.print("Die alte Mantisse: "+mantisse + ", der alte Exponent: " + exponent);
                 if(mantisse>maxMantisse){
-                    mantisse = (int)((mantisse+1)/(Math.pow(2,k))); //damit aufgerundet wird mantisse+1
-                    exponent+=k;
-                }*/
-                while(mantisse>maxMantisse){
-                    mantisse = (mantisse+1)/2; //+1 damit aufgerundet wird
-                    exponent++;
-                    System.out.println(mantisse);
+                    double z = mantisse/(Math.pow(2,x)); //damit aufgerundet wird mantisse+1
+                    mantisse = (int)Math.round(z);
+                    exponent+=x;
                 }
                 
+                /*while(mantisse>maxMantisse){
+                    mantisse = (mantisse+1)/2; //+1 damit aufgerundet wird
+                    exponent++;
+                    //System.out.println(mantisse);
+                }*/
+                //System.out.println(", die neue Mantisse: "+mantisse + ", der neue Exponent: " + exponent);
                 //wenn der exponent seinen Maximalwert überschreitet, kann auch mit der Manisse nichts
                 //ausgeglichen werden
                 if(maxExponent< exponent){
@@ -368,20 +371,43 @@ public class Gleitpunktzahl {
                 if(this.toDouble()<0 && r.toDouble()<0){
                     //Zahlen addieren und negatives Vorzeichen
                     summe.vorzeichen=true;
+                    summe.mantisse = this.mantisse + r.mantisse;
                 }
                 else if(this.toDouble()<0){
-                    //wenn this vom betrag größer als r ist, dann
-                    //this minus r und negatives vorzeichen
-                    //wenn this vom betrag her kleiner ist als r, dann
-                    //r minus this und positives Vorzeichen
-                    //wenn die Zahlen vom Betrag her gleich groß sind: 0
+                    if(Math.abs(this.toDouble())>Math.abs(r.toDouble())){
+                        //wenn this vom betrag größer als r ist, dann
+                        //this minus r und negatives vorzeichen
+                        summe.vorzeichen=true;
+                        summe.mantisse = this.mantisse - r.mantisse;
+                    }
+                    else if(Math.abs(this.toDouble())<Math.abs(r.toDouble())){
+                        //wenn this vom betrag her kleiner ist als r, dann
+                        //r minus this und positives Vorzeichen
+                        summe.vorzeichen = false;
+                        summe.mantisse = r.mantisse-this.mantisse;
+                    }
+                    else{
+                        //wenn die Zahlen vom Betrag her gleich groß sind: 0
+                        summe.setNull();
+                    }
                 }
                 else if(r.toDouble()<0){
-                    //wenn r vom betrag größer als this ist, dann
-                    //r minus this und negatives vorzeichen
-                    //wenn r vom betrag her kleiner ist als this, dann
-                    //this minus r und positives Vorzeichen
-                    //wenn die Zahlen vom Betrag her gleich groß sind: 0
+                    if(Math.abs(r.toDouble())>Math.abs(this.toDouble())){
+                        //wenn r vom betrag größer als this ist, dann
+                        //r minus this und negatives vorzeichen
+                        summe.vorzeichen = true;
+                        summe.mantisse = r.mantisse - this.mantisse;
+                    }
+                    else if(Math.abs(r.toDouble())<Math.abs(this.toDouble())){
+                        //wenn r vom betrag her kleiner ist als this, dann
+                        //this minus r und positives Vorzeichen
+                        summe.mantisse = this.mantisse - r.mantisse;
+                        summe.vorzeichen = false;
+                    }
+                    else{
+                        //wenn die Zahlen vom Betrag her gleich groß sind: 0
+                        summe.setNull();
+                    }
                 }
                 else{
                     summe.mantisse = this.mantisse + r.mantisse;
@@ -406,6 +432,7 @@ public class Gleitpunktzahl {
 		 * Funktionen normalisiere und denormalisiere.
 		 * Achten Sie auf Sonderfaelle!
 		 */
+                //!!!! this - r !!!!
                 denormalisiere(this,r);
                 Gleitpunktzahl differenz = new Gleitpunktzahl();
                 if(this.exponent!=r.exponent){
@@ -413,22 +440,44 @@ public class Gleitpunktzahl {
                 }
                 differenz.exponent = this.exponent;
                 if(r.vorzeichen == true && this.vorzeichen==true){
-                    //wenn r betragsmäßig größer ist als this, dann
-                    //r - this und positives Vorzeichen
-                    //sonst:
-                    //this-r und negatives Vorzeichen
+                    if(Math.abs(r.toDouble())>Math.abs(this.toDouble())){
+                        //wenn r betragsmäßig größer ist als this, dann
+                        //r - this und positives Vorzeichen
+                        differenz.mantisse = r.mantisse - this.mantisse;
+                        differenz.vorzeichen = false;
+                    }
+                    else if(Math.abs(r.toDouble())>Math.abs(this.toDouble())){
+                        //sonst:
+                        //this-r und negatives Vorzeichen
+                        differenz.mantisse = this.mantisse - r.mantisse;
+                        differenz.vorzeichen = true;
+                    }
+                    else{
+                        differenz.setNull();
+                    }
                 }
                 else if(r.vorzeichen == true){
                     //addiere die Zahlen und positives Vorzeichen
+                    differenz.mantisse = this.mantisse + r.mantisse;
+                    differenz.vorzeichen = false;
                 }
                 else if(this.vorzeichen == true){
                     //addiere die Zahlen und negatives Vorzeichen
+                    differenz.mantisse = this.mantisse + r.mantisse;
+                    differenz.vorzeichen = true;
                 }
                 else if(r.toDouble() > this.toDouble()){
                     //ziehe this von r ab und negatives Vorzeichen
+                    differenz.mantisse = r.mantisse - this.mantisse;
+                    differenz.vorzeichen = true;
                 }
                 else{
-                    differenz.mantisse = this.mantisse - r.mantisse;
+                    if(r.toDouble() == this.toDouble()){
+                        differenz.setNull();
+                    }
+                    else{
+                        differenz.mantisse = this.mantisse - r.mantisse;
+                    }
                 }
                 
                 this.normalisiere();
