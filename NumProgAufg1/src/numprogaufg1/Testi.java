@@ -6,7 +6,6 @@ public class Testi {
         
         Gleitpunktzahl a = new Gleitpunktzahl(5);
         Gleitpunktzahl b = new Gleitpunktzahl(3);
-        a.setNan();
         System.out.println("a: " + a.toString()+ " = " + a.toDouble());
         System.out.println("b: " + b.toString()+ " = " + b.toDouble());
         System.out.println(a.exponent);

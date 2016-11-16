@@ -361,8 +361,33 @@ public class Gleitpunktzahl {
 		 * Funktionen normalisiere und denormalisiere.
 		 * Achten Sie auf Sonderfaelle!
 		 */
-                denormalisiere(this,r);
                 Gleitpunktzahl summe = new Gleitpunktzahl();
+                if(r.isNull()){
+                    summe = new Gleitpunktzahl(this);
+                    return summe;
+                }
+                if(this.isNull()){
+                    summe = new Gleitpunktzahl(r);
+                    return summe;
+                }
+                if(this.isNaN() || r.isNaN()){
+                    summe.setNaN();
+                    return summe;
+                }
+                if(this.isInfinite()||r.isInfinite()){
+                    if(this.vorzeichen!=r.vorzeichen){
+                        //keine sinnvolle Lösung -> NaN
+                        summe.setNaN();
+                        return summe;
+                    }
+                    else{
+                        //unendlich + unendlich = unendlich
+                        summe.setInfinite(this.vorzeichen);
+                        return summe;
+                    }
+                }
+                
+                denormalisiere(this,r);
                 summe.exponent = this.exponent;
                 if(this.exponent != r.exponent){
                     System.out.println("Da ist was beim Normalisieren schief gelaufen!");
@@ -433,8 +458,36 @@ public class Gleitpunktzahl {
 		 * Achten Sie auf Sonderfaelle!
 		 */
                 //!!!! this - r !!!!
-                denormalisiere(this,r);
                 Gleitpunktzahl differenz = new Gleitpunktzahl();
+                if(this.isNull()){
+                    differenz = new Gleitpunktzahl(r);
+                    differenz.vorzeichen = !r.vorzeichen;
+                    return differenz;
+                }
+                if(r.isNull()){
+                    differenz = new Gleitpunktzahl(r);
+                    return differenz;
+                }
+                if(this.isNaN() || r.isNaN()){
+                    //mit NaN-Werten kann nicht gerechnet werden
+                    differenz.setNaN();
+                    return differenz;
+                }
+                if(this.isInfinite() || r.isInfinite()){
+                    if(this.vorzeichen == r.vorzeichen){
+                        //kein sinnvolles Ergebnis -> NaN
+                        differenz.setNaN();
+                        return differenz;
+                    }
+                    else{
+                        //der Wert wird unendlich und erhält das
+                        //gleiche Vorzeichen wie this,
+                        //da der Wert von r die Zahl nur noch "unendlicher" macht
+                        differenz.setInfinite(this.vorzeichen);
+                        return differenz;
+                    }
+                }
+                denormalisiere(this,r);
                 if(this.exponent!=r.exponent){
                     System.out.println("da ist was schief gegangen beim denormalisieren");
                 }
