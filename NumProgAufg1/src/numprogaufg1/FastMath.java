@@ -44,13 +44,9 @@ public class FastMath {
 	 * @return Approximation for 1 / sqrt(x).
 	 */
 	public static Gleitpunktzahl invSqrt(Gleitpunktzahl x) {
-          // Parse Gleitpunktzahl into int.
           int val = gleitpunktzahlToIEEE(x);
-
           val /= 2;
-
           val = FastMath.MAGIC_NUMBER - val;
-
           return iEEEToGleitpunktzahl(val);
 	}
 
