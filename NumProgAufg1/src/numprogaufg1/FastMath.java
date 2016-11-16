@@ -19,7 +19,7 @@ public class FastMath {
 	 * In literature, several of those constants for floats or doubles can be
 	 * found. There's no optimal constant for all cases.
 	 */
-	private static int MAGIC_NUMBER = 1024;
+	private static int MAGIC_NUMBER = 1338;
 
 	/**
 	 * belegt die MAGIC_NUMBER mit dem Wert magic

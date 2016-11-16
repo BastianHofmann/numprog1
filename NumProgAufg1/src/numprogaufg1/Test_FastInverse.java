@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 public class Test_FastInverse {
 
 	/** Beispielwerte fuer IEEE Standard mit 32 Bits */
-	private static int MAGIC_NUMBER = 1462;
+        private static int MAGIC_NUMBER = 1338;
 
 	private static int anzBitsExponent = 4;
 	private static int anzBitsMantisse = 8;
