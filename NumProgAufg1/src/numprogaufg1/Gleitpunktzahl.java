@@ -76,7 +76,6 @@ public class Gleitpunktzahl {
 	 * wird der Standardwert gesperrt
 	 */
 	Gleitpunktzahl() {
-                //System.out.println(Gleitpunktzahl.maxExponent);
 		sizeMantisseFixed = true;
 		sizeExponentFixed = true;
 	}
@@ -278,44 +277,28 @@ public class Gleitpunktzahl {
 		 * ist.
 		 * Achten Sie auf Sonderfaelle!
 		 */
-                int maxMantisse = 0;
-                maxMantisse = (int)Math.pow(2,sizeMantisse)-1;
-                /*for(int i=0; i<sizeMantisse; i++){
-                    maxMantisse += Math.pow(2,i);
-                }*/
-                //solange das Komma verschieben und gleichzeitig
-                //den Exponenten inkrementierren bis
-                //die Mantisse nur noch eine Stelle vor dem Komma hat
-                //(wie auf Nachkommastellen prüfen?)
-                //das rundet mit jeder statt nur mit der letzten stelle
-                //System.out.println(mantisse+" - " +maxMantisse);
-                //System.out.println(this.toString());
-                //System.out.println(maxMantisse);
-                double m = maxMantisse;
-                m = m/mantisse;
-                //damit am Ende richtig gerundet wird
-                m = Math.log(m) / Math.log(0.5);
-                //m = m / Math.log(0.5);
-                int x = (int)Math.ceil(m);
-                //System.out.print("Die alte Mantisse: "+mantisse + ", der alte Exponent: " + exponent);
-                if(mantisse>maxMantisse){
-                    double z = mantisse/(Math.pow(2,x)); //damit aufgerundet wird mantisse+1
-                    mantisse = (int)Math.round(z);
-                    exponent+=x;
+                if(this.isInfinite() || this.isNaN() || this.isNull()){
+                    return;
                 }
                 
-                /*while(mantisse>maxMantisse){
-                    mantisse = (mantisse+1)/2; //+1 damit aufgerundet wird
-                    exponent++;
-                    //System.out.println(mantisse);
-                }*/
-                //System.out.println(", die neue Mantisse: "+mantisse + ", der neue Exponent: " + exponent);
+                int maxMantisse = (int)Math.pow(2,sizeMantisse)-1;
+                int minMantisse = (int)Math.pow(2, sizeMantisse-1);
+                double m = maxMantisse;
+                m = m/mantisse;
+                m = Math.log(m) / Math.log(0.5);
+                int x = (int)Math.ceil(m);
+                
+                //mantisse wird angepasst, sodass sie immer mit 1,... beginnt
+                //dabei wird auch der Exponent dann angepasst
+                double z = mantisse/(Math.pow(2,x));
+                mantisse = (int)Math.round(z);
+                exponent+=x;
+                
                 //wenn der exponent seinen Maximalwert überschreitet, kann auch mit der Manisse nichts
                 //ausgeglichen werden
                 if(maxExponent< exponent){
                     this.setInfinite(vorzeichen);
                 }
-                //System.out.println("Maximaler Mantissenwert: " +maxMantisse);
 	}
 
 	/**
@@ -324,6 +307,9 @@ public class Gleitpunktzahl {
 	 * erweitert. Denormalisieren wird fuer add und sub benoetigt.
 	 */
 	public static void denormalisiere(Gleitpunktzahl a, Gleitpunktzahl b) {
+                if(a.isNaN() || b.isNaN() || a.isNull() || b.isNull() || a.isInfinite() || b.isInfinite()){
+                    return;
+                }
                 double ad = a.toDouble();
                 double bd = b.toDouble();
                 if(ad<0){
@@ -341,7 +327,7 @@ public class Gleitpunktzahl {
                 }
                 else if(bd>ad){
                     //denormalisiere b
-                    //falls Exponenten gleich groß sind wird alles mal 2^0, also mall 1 gerechnet, also sollte nichts passieren
+                    //falls Exponenten gleich groß sind wird alles mal 2^0, also mal 1 gerechnet, also sollte nichts passieren
                     int diff = b.exponent - a.exponent;
                     b.exponent = a.exponent;
                     b.mantisse=b.mantisse*(int) (Math.pow(2,diff));
@@ -389,9 +375,9 @@ public class Gleitpunktzahl {
                 
                 denormalisiere(this,r);
                 summe.exponent = this.exponent;
-                if(this.exponent != r.exponent){
-                    System.out.println("Da ist was beim Normalisieren schief gelaufen!");
-                }
+//                if(this.exponent != r.exponent){
+//                    System.out.println("Da ist was beim Normalisieren schief gelaufen!");
+//                }
                 
                 if(this.toDouble()<0 && r.toDouble()<0){
                     //Zahlen addieren und negatives Vorzeichen
@@ -399,13 +385,14 @@ public class Gleitpunktzahl {
                     summe.mantisse = this.mantisse + r.mantisse;
                 }
                 else if(this.toDouble()<0){
-                    if(Math.abs(this.toDouble())>Math.abs(r.toDouble())){
+                    
+                    if(this.compareAbsTo(r)>=1){
                         //wenn this vom betrag größer als r ist, dann
                         //this minus r und negatives vorzeichen
                         summe.vorzeichen=true;
                         summe.mantisse = this.mantisse - r.mantisse;
                     }
-                    else if(Math.abs(this.toDouble())<Math.abs(r.toDouble())){
+                    else if(this.compareAbsTo(r)<=-1){
                         //wenn this vom betrag her kleiner ist als r, dann
                         //r minus this und positives Vorzeichen
                         summe.vorzeichen = false;
@@ -417,13 +404,13 @@ public class Gleitpunktzahl {
                     }
                 }
                 else if(r.toDouble()<0){
-                    if(Math.abs(r.toDouble())>Math.abs(this.toDouble())){
+                    if(this.compareAbsTo(r)<=-1){
                         //wenn r vom betrag größer als this ist, dann
                         //r minus this und negatives vorzeichen
                         summe.vorzeichen = true;
                         summe.mantisse = r.mantisse - this.mantisse;
                     }
-                    else if(Math.abs(r.toDouble())<Math.abs(this.toDouble())){
+                    else if(this.compareAbsTo(r)>=1){
                         //wenn r vom betrag her kleiner ist als this, dann
                         //this minus r und positives Vorzeichen
                         summe.mantisse = this.mantisse - r.mantisse;
@@ -457,7 +444,6 @@ public class Gleitpunktzahl {
 		 * Funktionen normalisiere und denormalisiere.
 		 * Achten Sie auf Sonderfaelle!
 		 */
-                //!!!! this - r !!!!
                 Gleitpunktzahl differenz = new Gleitpunktzahl();
                 if(this.isNull()){
                     differenz = new Gleitpunktzahl(r);
@@ -488,24 +474,26 @@ public class Gleitpunktzahl {
                     }
                 }
                 denormalisiere(this,r);
-                if(this.exponent!=r.exponent){
-                    System.out.println("da ist was schief gegangen beim denormalisieren");
-                }
+//                if(this.exponent!=r.exponent){
+//                    System.out.println("da ist was schief gegangen beim denormalisieren");
+//                }
                 differenz.exponent = this.exponent;
                 if(r.vorzeichen == true && this.vorzeichen==true){
-                    if(Math.abs(r.toDouble())>Math.abs(this.toDouble())){
+                    
+                    if(this.compareAbsTo(r)<=-1){
                         //wenn r betragsmäßig größer ist als this, dann
                         //r - this und positives Vorzeichen
                         differenz.mantisse = r.mantisse - this.mantisse;
                         differenz.vorzeichen = false;
                     }
-                    else if(Math.abs(r.toDouble())>Math.abs(this.toDouble())){
-                        //sonst:
+                    else if(this.compareAbsTo(r)>=1){
+                        //wenn r betragsmäßig kleiner ist als this, dann
                         //this-r und negatives Vorzeichen
                         differenz.mantisse = this.mantisse - r.mantisse;
                         differenz.vorzeichen = true;
                     }
                     else{
+                        //this.compareAbsTo(r) == 0
                         differenz.setNull();
                     }
                 }
