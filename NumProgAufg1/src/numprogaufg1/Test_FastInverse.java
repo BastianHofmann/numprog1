@@ -13,10 +13,10 @@ import javax.swing.JFrame;
 public class Test_FastInverse {
 
 	/** Beispielwerte fuer IEEE Standard mit 32 Bits */
-	private static int MAGIC_NUMBER = 0x5f3759df;
+        private static int MAGIC_NUMBER = 1338;
 
-	private static int anzBitsExponent = 8;
-	private static int anzBitsMantisse = 24;
+	private static int anzBitsExponent = 4;
+	private static int anzBitsMantisse = 8;
 
 	/**
 	 * Uses the FastMath class and invokes the plotter. In a logarithmically
