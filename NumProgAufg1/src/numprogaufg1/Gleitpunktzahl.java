@@ -299,6 +299,9 @@ public class Gleitpunktzahl {
                 if(maxExponent< exponent){
                     this.setInfinite(vorzeichen);
                 }
+                else if(maxExponent<Math.abs(exponent)){
+                    this.setNull();
+                }
 	}
 
 	/**
