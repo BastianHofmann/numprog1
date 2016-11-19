@@ -154,12 +154,43 @@ public class Test_Gleitpunktzahl {
 			 * Eigene Tests einfuegen
 			 */
 
-			System.out.println("\n\nEIGENE TESTS EINFÜGEN!!!!!!!\n\n");
+			System.out.println("Test: Eigene");
+			x = new Gleitpunktzahl(2.25);
+			y = new Gleitpunktzahl(0.75);
+
+			// Berechnung mit der Methode des Studenten durchfuehren
+			gleiterg = x.sub(y);
+                        gleitref = new Gleitpunktzahl(1.5);
+
+			// Test, ob Ergebnis korrekt
+			if (gleiterg.compareAbsTo(gleitref) != 0
+					|| gleiterg.vorzeichen != gleitref.vorzeichen) {
+				printSub(x.toString(), y.toString());
+				printErg(gleiterg.toString(), gleitref.toString());
+			} else {
+				System.out.println("    Richtiges Ergebnis\n");
+			}
+
+			System.out.println("Test: Eigene 2");
+			x = new Gleitpunktzahl(2.25);
+			y = new Gleitpunktzahl(-0.75);
+
+			// Berechnung mit der Methode des Studenten durchfuehren
+			gleiterg = x.sub(y);
+                        gleitref = new Gleitpunktzahl(3);
+
+			// Test, ob Ergebnis korrekt
+			if (gleiterg.compareAbsTo(gleitref) != 0
+					|| gleiterg.vorzeichen != gleitref.vorzeichen) {
+				printSub(x.toString(), y.toString());
+				printErg(gleiterg.toString(), gleitref.toString());
+			} else {
+				System.out.println("    Richtiges Ergebnis\n");
+			}
 
 
 		} catch (Exception e) {
-			System.out
-					.print("Exception bei der Auswertung des Ergebnis in der Klasse Gleitpunktzahl!!\n");
+			System.out.print("Exception bei der Auswertung des Ergebnis in der Klasse Gleitpunktzahl!!\n");
 		}
 
 	}
