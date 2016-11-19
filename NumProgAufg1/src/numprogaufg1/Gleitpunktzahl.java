@@ -296,12 +296,24 @@ public class Gleitpunktzahl {
                 
                 //wenn der exponent seinen Maximalwert überschreitet, kann auch mit der Manisse nichts
                 //ausgeglichen werden
+                if(maxExponent == exponent){
+                    if(mantisse !=0){
+                        
+                        this.setInfinite(vorzeichen);
+                    }
+                    else{
+                        //theoretisch noch Abfrage, ob pos/neg Vorzeichen
+                        //würde aber beides in Null resultieren.
+                        this.setNull();
+                    }
+                }
                 if(maxExponent< exponent){
                     this.setInfinite(vorzeichen);
                 }
                 else if(maxExponent<Math.abs(exponent)){
                     this.setNull();
                 }
+                
 	}
 
 	/**

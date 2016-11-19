@@ -1,11 +1,11 @@
 
 public class Testi {
     public static void main(String[] args){
-        Gleitpunktzahl.setSizeExponent(4);
-        Gleitpunktzahl.setSizeMantisse(2);
+        Gleitpunktzahl.setSizeExponent(2);
+        Gleitpunktzahl.setSizeMantisse(4);
         
-        Gleitpunktzahl a = new Gleitpunktzahl(-0.001);
-        Gleitpunktzahl b = new Gleitpunktzahl(0.002);
+        Gleitpunktzahl a = new Gleitpunktzahl(0.5);
+        Gleitpunktzahl b = new Gleitpunktzahl(3.75);
         System.out.println("a: " + a.toString()+ " = " + a.toDouble());
         System.out.println("b: " + b.toString()+ " = " + b.toDouble());
         System.out.println(a.exponent);
