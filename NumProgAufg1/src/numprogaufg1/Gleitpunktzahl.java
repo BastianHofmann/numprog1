@@ -459,88 +459,10 @@ public class Gleitpunktzahl {
 		 * Funktionen normalisiere und denormalisiere.
 		 * Achten Sie auf Sonderfaelle!
 		 */
-                Gleitpunktzahl differenz = new Gleitpunktzahl();
-                if(this.isNull()){
-                    differenz = new Gleitpunktzahl(r);
-                    differenz.vorzeichen = !r.vorzeichen;
-                    return differenz;
-                }
-                if(r.isNull()){
-                    differenz = new Gleitpunktzahl(r);
-                    return differenz;
-                }
-                if(this.isNaN() || r.isNaN()){
-                    //mit NaN-Werten kann nicht gerechnet werden
-                    differenz.setNaN();
-                    return differenz;
-                }
-                if(this.isInfinite() || r.isInfinite()){
-                    if(this.vorzeichen == r.vorzeichen){
-                        //kein sinnvolles Ergebnis -> NaN
-                        differenz.setNaN();
-                        return differenz;
-                    }
-                    else{
-                        //der Wert wird unendlich und erhält das
-                        //gleiche Vorzeichen wie this,
-                        //da der Wert von r die Zahl nur noch "unendlicher" macht
-                        differenz.setInfinite(this.vorzeichen);
-                        return differenz;
-                    }
-                }
-                denormalisiere(this,r);
-//                if(this.exponent!=r.exponent){
-//                    System.out.println("da ist was schief gegangen beim denormalisieren");
-//                }
-                differenz.exponent = this.exponent;
-                if(r.vorzeichen == true && this.vorzeichen==true){
-                    
-                    if(this.compareAbsTo(r)<=-1){
-                        //wenn r betragsmäßig größer ist als this, dann
-                        //r - this und positives Vorzeichen
-                        differenz.mantisse = r.mantisse - this.mantisse;
-                        differenz.vorzeichen = false;
-                    }
-                    else if(this.compareAbsTo(r)>=1){
-                        //wenn r betragsmäßig kleiner ist als this, dann
-                        //this-r und negatives Vorzeichen
-                        differenz.mantisse = this.mantisse - r.mantisse;
-                        differenz.vorzeichen = true;
-                    }
-                    else{
-                        //this.compareAbsTo(r) == 0
-                        differenz.setNull();
-                    }
-                }
-                else if(r.vorzeichen == true){
-                    //addiere die Zahlen und positives Vorzeichen
-                    differenz.mantisse = this.mantisse + r.mantisse;
-                    differenz.vorzeichen = false;
-                }
-                else if(this.vorzeichen == true){
-                    //addiere die Zahlen und negatives Vorzeichen
-                    differenz.mantisse = this.mantisse + r.mantisse;
-                    differenz.vorzeichen = true;
-                }
-                else if(r.toDouble() > this.toDouble()){
-                    //ziehe this von r ab und negatives Vorzeichen
-                    differenz.mantisse = r.mantisse - this.mantisse;
-                    differenz.vorzeichen = true;
-                }
-                else{
-                    if(r.toDouble() == this.toDouble()){
-                        differenz.setNull();
-                    }
-                    else{
-                        differenz.mantisse = this.mantisse - r.mantisse;
-                    }
-                }
-                
-                this.normalisiere();
-                r.normalisiere();
-                differenz.normalisiere();
-                
-		return differenz;
+            r.vorzeichen = ! r.vorzeichen;
+            Gleitpunktzahl res = this.add(r);
+            r.vorzeichen = ! r.vorzeichen;
+            return res;
 	}
 	
 	/**
