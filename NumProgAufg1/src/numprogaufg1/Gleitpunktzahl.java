@@ -375,17 +375,23 @@ public class Gleitpunktzahl {
                     summe.setNaN();
                     return summe;
                 }
-                if(this.isInfinite()||r.isInfinite()){
+                if(this.isInfinite() && r.isInfinite()) {
                     if(this.vorzeichen!=r.vorzeichen){
-                        //keine sinnvolle Lösung -> NaN
                         summe.setNaN();
                         return summe;
                     }
-                    else{
-                        //unendlich + unendlich = unendlich
-                        summe.setInfinite(this.vorzeichen);
-                        return summe;
+                    else {
+                      summe.setInfinite(this.vorzeichen);
+                      return summe;
                     }
+                }
+                if(this.isInfinite()){
+                    summe.setInfinite(this.vorzeichen);
+                    return summe;
+                }
+                if(r.isInfinite()) {
+                    summe.setInfinite(r.vorzeichen);
+                    return summe;
                 }
                 
                 denormalisiere(this,r);

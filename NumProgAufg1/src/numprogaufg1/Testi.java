@@ -5,11 +5,13 @@ public class Testi {
         Gleitpunktzahl.setSizeMantisse(4);
         
         Gleitpunktzahl a = new Gleitpunktzahl(0.5);
+        //a.setNaN(true);
         Gleitpunktzahl b = new Gleitpunktzahl(3.75);
+        b.setInfinite(true);
         System.out.println("a: " + a.toString()+ " = " + a.toDouble());
         System.out.println("b: " + b.toString()+ " = " + b.toDouble());
         System.out.println(a.exponent);
-        Gleitpunktzahl.denormalisiere(a, b);
+        // Gleitpunktzahl.denormalisiere(a, b);
         /*System.out.println("------\nDenormalisiert: ");
         
         System.out.println("a: " + a.toString()+ " = " + a.toDouble());
