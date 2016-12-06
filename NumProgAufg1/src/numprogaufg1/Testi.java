@@ -4,8 +4,15 @@ public class Testi {
         Gleitpunktzahl.setSizeExponent(2);
         Gleitpunktzahl.setSizeMantisse(4);
         
-        Gleitpunktzahl a = new Gleitpunktzahl(0.5);
+        Gleitpunktzahl a = new Gleitpunktzahl(0);
+        a.setInfinite(false);
         Gleitpunktzahl b = new Gleitpunktzahl(3.75);
+        //unendlich + iwas = unendlich
+        //unendlich - iwas = unendlich
+        //unendlich + unednlich = unendlich
+        //unendlich - unendlich = nan
+        //nan +/- iwas
+        //null +/- iwas
         System.out.println("a: " + a.toString()+ " = " + a.toDouble());
         System.out.println("b: " + b.toString()+ " = " + b.toDouble());
         System.out.println(a.exponent);
