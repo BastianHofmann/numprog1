@@ -15,12 +15,24 @@ public class Gauss {
                 }
                 double[] x = new double[b.length];
                 //zu Beginn sind alle Elemente durch defualt mit x = 0 belegt, oder extra machen?
-                for(int i=b.length-1; i>0;i++){
+                for(int i=b.length-1; i>=0;i--){ //for-Schleife um jede Zeile x_i absteigend zu bestimmen
+                    if(R[i][i]==0){
+                        System.out.println("ACHTUNG!");
+                    }
+                    double sum = 0;
+                    for(int j=0; j<b.length; j++){
+                        if(j!=i){
+                            sum += R[i][j] * x[j];
+                        }
+                    }
+                    if(b[i]-sum==0){
+                        System.out.println("LGS nicht eindeutig lösbar!");
+                    }
+                    x[i] = (b[i] - sum)/R[i][i];
                     //n b(zw. i)-te Zeile, j-te Spalte:
                     //b_n - (alle j!=n : a_nj* x_j //also minus alle anderen Elemente in der Zeile mit ihrem jeweiligen x mal-genommen
                 }
-		//TODO: Diese Methode ist zu implementieren
-		return new double[2];
+		return x;
 	}
 
 	/**
@@ -31,21 +43,53 @@ public class Gauss {
 	 * b: Ein Vektor der Laenge n
 	 */
 	public static double[] solve(double[][] A, double[] b) {
-                //nachdem man per spalten-pivotsuche eine obere-Dreecksmatrix erhalten hat -> backSubst(A,b) aufrufen!
-                //also: return backSubst(A,b);
-		//TODO: Diese Methode ist zu implementieren
-                //doppelte for-Schleife k und i, wobei die i's immer nur größer sein dürfen als k:
-                for(int k=0; k<b.length; k++){
-                    
-                    for(int i=k+1;i<b.length;i++){ //i-te Zeile
-                        //hilfs-Vektor h aufstellen: k-te Spalte mal  a_ik / a_kk
-                        for(int j=0;j<b.length;j++){ //j-te Spalte
-                            //A_ij - h_j
+                double[][] X = new double[b.length][b.length];
+                double[] b_help = new double[b.length];
+                for(int i=0; i<b.length; i++){
+                    for(int j=0; j<b.length; j++){
+                        X[i][j] = A[i][j];
+                    }
+                    b_help[i] = b[i];
+                }
+                for(int k=0; k<(b.length-1);k++){
+                    //für jede Zeile (bis auf die letzte -> trivial:
+                    //finde größte Zahl ab Zeile k in Spalte k.
+                    int merker = k;
+                    for(int j = k+1; j<b.length;j++){
+                        if(Math.abs(X[j][k]) > Math.abs(X[merker][k])){
+                            merker = j;
                         }
                     }
-                    //evtl k-te Zeile normiere, also dass 1. nicht-null Eintrag =1 ?
+                    if(merker!=k){
+                        //tausche k-te mit merker-Zeile
+                        double h = 0;
+                        h = b_help[k];
+                        b_help[k] = b_help[merker];
+                        b_help[merker] = h; 
+                        for(int i=0; i<b.length;i++){
+                            h = X[k][i];
+                            X[k][i] = X[merker][i];
+                            X[merker][i] = h;
+                        }
+                    }
+                    //nun steht in der k-ten Spalte in der k-ten Zeile das kleinste Element dieser Spalte
+                    if(X[k][k] == 0){
+                        System.out.println("Das Element x_k,k = 0, also kann nicht weitergerechnet werden!");
+                    }
+                    else{
+                    for(int i=k+1; i<b.length;i++){
+                        //nun nullt man alle Zahlen in der k-ten Spalte unterhalb der k-ten Zeile
+                        double vorfaktor = X[i][k] / X[k][k];
+                        for(int j = k; j<b.length;j++){
+                            //dafür muss man die ganze Zeile ab dem k-ten Element durchlaufen
+                            X[i][j] = X[i][j] - vorfaktor * X[k][j];
+                        }
+                        b_help[i] =b_help[i]- vorfaktor*b_help[k];
+                        
+                    }
+                    }
                 }
-		return new double[2];
+                return backSubst(X,b_help);  
 	}
 
 	/**
@@ -66,6 +110,77 @@ public class Gauss {
 	 * A: Eine singulaere Matrix der Groesse n x n 
 	 */
 	public static double[] solveSing(double[][] A) {
+                double[][] X = new double[A.length][A.length];
+                double[] b = new double[A.length];
+                for(int i=0; i<b.length; i++){
+                    for(int j=0; j<b.length; j++){
+                        X[i][j] = A[i][j];
+                    }
+                    //b[i] = 0; wird schon per default mit Nullen gefüllt
+                }
+                int merker = 0;
+                int k = 0;
+                for(k=0; k<(b.length-1);k++){
+                    //für jede Zeile (bis auf die letzte -> trivial:
+                    //finde größte Zahl ab Zeile k in Spalte k.
+                    merker = k;
+                    for(int j = k+1; j<b.length;j++){
+                        if(Math.abs(X[j][k]) > Math.abs(X[merker][k])){
+                            merker = j;
+                        }
+                    }
+                    if(X[merker][k] == 0){
+                        break;
+                    }
+                    else if(merker!=k){
+                        //tausche k-te mit merker-Zeile
+                        double h = 0;
+                        h = b[k];
+                        b[k] = b[merker];
+                        b[merker] = h; 
+                        for(int i=0; i<b.length;i++){
+                            h = X[k][i];
+                            X[k][i] = X[merker][i];
+                            X[merker][i] = h;
+                        }
+                    }
+                    //nun steht in der k-ten Spalte in der k-ten Zeile das kleinste Element dieser Spalte
+                    if(X[k][k] == 0){
+                        System.out.println("Das Element x_k,k = 0, also kann nicht weitergerechnet werden!");
+                    }
+                    else{
+                    for(int i=k+1; i<b.length;i++){
+                        //nun nullt man alle Zahlen in der k-ten Spalte unterhalb der k-ten Zeile
+                        double vorfaktor = X[i][k] / X[k][k];
+                        for(int j = k; j<b.length;j++){
+                            //dafür muss man die ganze Zeile ab dem k-ten Element durchlaufen
+                            X[i][j] = X[i][j] - vorfaktor * X[k][j];
+                        }
+                        b[i] =b[i]- vorfaktor*b[k];
+                        
+                    }
+                    }
+                }
+                if(merker == b.length && X[merker][k] != 0 ) {
+                    //alles normal, es handelt sich um eine "Standardmatrix", die
+                    //man trotzdem nicht eindeutig bestimmen kann, da x_n = 0
+                    return backSubst(X,b);
+                }
+                double[][] T = new double[k][k];
+                double[] v = new double[k];
+                for(int i=0; i<k; i++){
+                    for(int j=0; j<k; j++){
+                        T[i][j] = X[i][j];
+                    }
+                    v[i] = X[i][k]; //i-te Zeile, k-te Spalte
+                }
+                double[] x = backSubst(T,v);
+                double[] p = new double[X.length];
+                for(int i=0; i<k; i++){
+                    p[i] = x[i];
+                }
+                p[k] = 1;
+                return p;
                 //man macht so lange das mit der Pivotisierung, bis man an einer
                 //Spalte angekommen ist, bei der ab der k-ten Zeile jeder Eintrag = 0 ist
                 //sobald das passiert ist, muss man Rückwärtssubstitution machen, aber nur noch mit einer
@@ -74,7 +189,6 @@ public class Gauss {
                 //der Ergebnisvektor x wird jetzt noch verlänger, sodass
                 //er gleich lang ist wie A und wird mit einer 1 und dann nur noch Nullen aufgefüllt.
 		//TODO: Diese Methode ist zu implementieren
-		return new double[2];
 	}
 
 	/**
