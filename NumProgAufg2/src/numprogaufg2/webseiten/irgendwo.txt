@@ -1,7 +1,7 @@
-4
-1 1 0 1
-1 1 1 0
-0 0 1 1
-0 1 0 1
-http://www.irgendwo.de
-http://www.nirgendwo.de
+3
+1 0 0
+0 1 1
+1 1 1
+http://www.schlecht.de
+http://www.mitte.de
+http://www.beste.de

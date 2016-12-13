@@ -129,7 +129,7 @@ public class Gauss {
                             merker = j;
                         }
                     }
-                    if(X[merker][k] == 0){
+                    if(Math.abs(X[merker][k]) < 1E-10){
                         break;
                     }
                     else if(merker!=k){
@@ -146,7 +146,7 @@ public class Gauss {
                     }
                     //nun steht in der k-ten Spalte in der k-ten Zeile das kleinste Element dieser Spalte
                     if(X[k][k] == 0){
-                        System.out.println("Das Element x_k,k = 0, also kann nicht weitergerechnet werden!");
+                        //System.out.println("Das Element x_k,k = 0, also kann nicht weitergerechnet werden!");
                     }
                     else{
                     for(int i=k+1; i<b.length;i++){
@@ -161,10 +161,10 @@ public class Gauss {
                     }
                     }
                 }
-                if(merker == b.length && X[merker][k] != 0 ) {
-                    //alles normal, es handelt sich um eine "Standardmatrix", die
-                    //man trotzdem nicht eindeutig bestimmen kann, da x_n = 0
-                    return backSubst(X,b);
+                if(merker == (b.length-1) && X[merker][k] != 0 ) {
+                    //der Nullvektor wird zurückgegeben, was aber wenn X[merker][k] == 0, dann
+                    //handelt es sich um eine nicht eindeutig bestimmbare Matrix...
+                    return b;
                 }
                 double[][] T = new double[k][k];
                 double[] v = new double[k];
@@ -172,7 +172,7 @@ public class Gauss {
                     for(int j=0; j<k; j++){
                         T[i][j] = X[i][j];
                     }
-                    v[i] = X[i][k]; //i-te Zeile, k-te Spalte
+                    v[i] =- X[i][k]; //i-te Zeile, k-te Spalte
                 }
                 double[] x = backSubst(T,v);
                 double[] p = new double[X.length];
@@ -180,16 +180,11 @@ public class Gauss {
                     p[i] = x[i];
                 }
                 p[k] = 1;
+                for(int i = k+1; i<p.length;i++){
+                    p[i] = 0;
+                }
                 return p;
-                //man macht so lange das mit der Pivotisierung, bis man an einer
-                //Spalte angekommen ist, bei der ab der k-ten Zeile jeder Eintrag = 0 ist
-                //sobald das passiert ist, muss man Rückwärtssubstitution machen, aber nur noch mit einer
-                //Teilmatrix:
-                //die ersten k-1 Zeilen & Spalten und b = k-te Spalte mit k-1 Zeilen
-                //der Ergebnisvektor x wird jetzt noch verlänger, sodass
-                //er gleich lang ist wie A und wird mit einer 1 und dann nur noch Nullen aufgefüllt.
-		//TODO: Diese Methode ist zu implementieren
-	}
+        }
 
 	/**
 	 * Diese Methode berechnet das Matrix-Vektor-Produkt A*x mit A einer nxm

@@ -112,11 +112,8 @@ public class Test {
 			System.out.println("  primitiver und unvollstaendiger Test der Methode rank");
 			String r[] = PageRank.getSortedURLs(lm.urls, lm.L, 0.15);
 
-			String r0[] = { "http://www.irgendwo.de", "http://www.nirgendwo.de" };
-			String r1[] = { "http://www.nirgendwo.de", "http://www.irgendwo.de" };
+			String r0[] = { "http://www.beste.de", "http://www.mitte.de", "http://www.schlecht.de"};
 			if (Util.rankingCompare(r, r0)) {
-				System.out.println("    Richtiges Ergebnis");
-			} else if (Util.rankingCompare(r, r1)) {
 				System.out.println("    Richtiges Ergebnis");
 			} else {
 				System.out.println("    FEHLER: falsches Ergebnis:");
