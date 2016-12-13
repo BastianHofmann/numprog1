@@ -55,11 +55,7 @@ public class PageRank {
     for(int i = 0; i < A.length; i++) {
       A[i][i] = A[i][i] - 1;
     }
-    System.out.println("Die Matrix:");
-    Util.printMatrix(A);
     double[] p = Gauss.solveSing(A);
-    System.out.println("Das p:");
-    Util.printVector(p);
     double lam = 0;
     // lam = 1 / sum lam
     for(int i = 0; i < p.length; i++) {
@@ -69,8 +65,6 @@ public class PageRank {
     for(int i = 0; i < p.length; i++) {
       p[i] *= lam;
     }
-    System.out.println("Das p:");
-    Util.printVector(p);
     return p;
   }
 
