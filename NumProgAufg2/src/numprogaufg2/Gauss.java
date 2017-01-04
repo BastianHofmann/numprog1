@@ -1,5 +1,3 @@
-
-
 public class Gauss {
 
 	/**
@@ -11,13 +9,13 @@ public class Gauss {
 	 */
 	public static double[] backSubst(double[][] R, double[] b) {
                 if(b.length != R.length){
-                    System.out.println("Die Matrix und der Vektor müssen gleich viele Zeilen haben!");
+                    //System.out.println("Die Matrix und der Vektor müssen gleich viele Zeilen haben!");
                 }
                 double[] x = new double[b.length];
                 //zu Beginn sind alle Elemente durch defualt mit x = 0 belegt, oder extra machen?
                 for(int i=b.length-1; i>=0;i--){ //for-Schleife um jede Zeile x_i absteigend zu bestimmen
                     if(R[i][i]==0){
-                        System.out.println("ACHTUNG!");
+                        //System.out.println("ACHTUNG!");
                     }
                     double sum = 0;
                     for(int j=0; j<b.length; j++){
@@ -26,7 +24,7 @@ public class Gauss {
                         }
                     }
                     if(b[i]-sum==0){
-                        System.out.println("LGS nicht eindeutig lösbar!");
+                        //System.out.println("LGS nicht eindeutig lösbar!");
                     }
                     x[i] = (b[i] - sum)/R[i][i];
                     //n b(zw. i)-te Zeile, j-te Spalte:
@@ -74,7 +72,7 @@ public class Gauss {
                     }
                     //nun steht in der k-ten Spalte in der k-ten Zeile das kleinste Element dieser Spalte
                     if(X[k][k] == 0){
-                        System.out.println("Das Element x_k,k = 0, also kann nicht weitergerechnet werden!");
+                        //System.out.println("Das Element x_k,k = 0, also kann nicht weitergerechnet werden!");
                     }
                     else{
                     for(int i=k+1; i<b.length;i++){
@@ -120,7 +118,7 @@ public class Gauss {
                 }
                 int merker = 0;
                 int k = 0;
-                for(k=0; k<b.length-1;k++){
+                for(k=0; k<(b.length-1);k++){
                     //für jede Zeile (bis auf die letzte -> trivial:
                     //finde größte Zahl ab Zeile k in Spalte k.
                     merker = k;
@@ -144,7 +142,7 @@ public class Gauss {
                             X[merker][i] = h;
                         }
                     }
-                    //nun steht in der k-ten Spalte in der k-ten Zeile das größte Element dieser Spalte
+                    //nun steht in der k-ten Spalte in der k-ten Zeile das kleinste Element dieser Spalte
                     if(X[k][k] == 0){
                         //System.out.println("Das Element x_k,k = 0, also kann nicht weitergerechnet werden!");
                     }

@@ -1,12 +1,12 @@
 
+
 public class Testi {
     public static void main(String[] args){
-        double C[][] = { {-0.1, 0.05, 0.333333},{0.05, -0.525, 0.333},{0.05, 0.475, -0.666666667} };
-       // double b[] = { -6,-17,-23,2};
-       //printvektor(b);
+        double C[][] = { {2,10,7,3},{4,-5,-2,-8},{8,-5,0,-4},{4,-10,3,-16} };
+        double b[] = { -6,-17,-23,2};
        //double x[] = Gauss.solve(C, b);
        double x[] = Gauss.solveSing(C);
-       printvektor(x);
+       Util.printVector(x);
        //x = Gauss.solve(C, b);
        //printvektor(x);
     }

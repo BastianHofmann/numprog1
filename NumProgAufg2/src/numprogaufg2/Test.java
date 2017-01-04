@@ -20,7 +20,7 @@ public class Test {
 
 		boolean test_gauss = true;
 		boolean test_pagerank = true;
-		boolean test_crawler = true;
+		boolean test_crawler = false;
 
 		double b[] = { 1, 1 };
 		double C[][] = { { 1, 0 }, { 0, 1 } };
@@ -92,13 +92,14 @@ public class Test {
 			 * Sie muessen entweder den gesamten absoluten Pfad angeben oder die
 			 * Umgebung entsprechend einrichten.
 			 */
-			lm.read("irgendwo.txt");
+			lm.read("./webseiten/irgendwo.txt");
 
-			System.out
-					.println("  primitiver und unvollstaendiger Test der Methode buildMatrix");
+			System.out.println("  primitiver und unvollstaendiger Test der Methode buildMatrix");
 
 			A = PageRank.buildProbabilityMatrix(lm.L, 0.15);
 			double A0[][] = { { 0.5, 0.5 }, { 0.5, 0.5 } };
+				Util.printMatrix(A);
+				Util.printMatrix(A0);
 			if (Util.matrixCompare(A, A0)) {
 				System.out.println("    Richtiges Ergebnis");
 			} else {
@@ -108,15 +109,11 @@ public class Test {
 				Util.printMatrix(A0);
 			}
 
-			System.out
-					.println("  primitiver und unvollstaendiger Test der Methode rank");
+			System.out.println("  primitiver und unvollstaendiger Test der Methode rank");
 			String r[] = PageRank.getSortedURLs(lm.urls, lm.L, 0.15);
 
-			String r0[] = { "http://www.irgendwo.de", "http://www.nirgendwo.de" };
-			String r1[] = { "http://www.nirgendwo.de", "http://www.irgendwo.de" };
+			String r0[] = { "http://www.beste.de", "http://www.mitte.de", "http://www.schlecht.de"};
 			if (Util.rankingCompare(r, r0)) {
-				System.out.println("    Richtiges Ergebnis");
-			} else if (Util.rankingCompare(r, r1)) {
 				System.out.println("    Richtiges Ergebnis");
 			} else {
 				System.out.println("    FEHLER: falsches Ergebnis:");
