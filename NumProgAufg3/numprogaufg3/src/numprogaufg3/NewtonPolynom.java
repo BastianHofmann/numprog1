@@ -86,7 +86,21 @@ public class NewtonPolynom implements InterpolationMethod {
 	 * Es gilt immer: x und y sind gleich lang.
 	 */
 	private void computeCoefficients(double[] y) {
-		/* TODO: diese Methode ist zu implementieren */
+          /* TODO: diese Methode ist zu implementieren */
+          this.f = new double[y.length];
+          this.a = new double[y.length];
+          for(int i = 0; i < y.length; i++) {
+            this.f[i] = y[i];
+          }
+          this.a[0] = this.f[0];
+          for(int k = 1; k < this.f.length; k++) {
+            for(int i = 0; i < (this.f.length - k); i++) {
+              this.f[i] = (this.f[i+1] - this.f[i]) / (this.x[i+k] - this.x[i]);
+              if(i == 0) {
+                this.a[k] = this.f[i];
+              }
+            }
+          }
 	}
 
 	/**
@@ -120,7 +134,36 @@ public class NewtonPolynom implements InterpolationMethod {
 	 *            neuer Stuetzwert
 	 */
 	public void addSamplingPoint(double x_new, double y_new) {
-		/* TODO: diese Methode ist zu implementieren */
+          /* TODO: diese Methode ist zu implementieren */
+          // Pruefe ob der neue Stuetzpunkt schon existiert.
+          for(int i = 0; i < this.x.length; i++) {
+            if(this.x[i] == x_new) {
+              return;
+            }
+          }
+          double [] new_f = new double[this.f.length + 1];
+          double [] new_a = new double[this.a.length + 1];
+          double [] new_x = new double[this.x.length + 1];
+
+          for(int i = 0; i < this.x.length; i++) {
+            new_x[i] = this.x[i];
+          }
+          new_x[new_x.length-1] = x_new;
+
+          new_f[new_f.length-1] = y_new;
+
+          for(int i = (new_f.length-2); i >= 0; i--) {
+            new_f[i] = (new_f[i+1] - this.f[i]) / (new_x[i] - new_x[(new_f.length - 1) - i]);
+          }
+
+          for(int i = 0; i < this.a.length; i++) {
+            new_a[i] = this.a[i];
+          }
+          new_a[new_a.length-1] = new_f[new_f.length-1];
+
+          this.f = new_f;
+          this.a = new_a;
+          this.x = new_x;
 	}
 
 	/**
@@ -130,7 +173,13 @@ public class NewtonPolynom implements InterpolationMethod {
 	 */
 	@Override
 	public double evaluate(double z) {
-		/* TODO: diese Methode ist zu implementieren */
-		return 0.0;
+          /* TODO: diese Methode ist zu implementieren */
+          double res = this.a[this.a.length - 1];
+          
+          for(int i = (this.x.length - 2); i >= 0; i--) {
+            res = this.a[i] + ((z - this.x[i]) * res);
+          }
+
+          return res;
 	}
 }

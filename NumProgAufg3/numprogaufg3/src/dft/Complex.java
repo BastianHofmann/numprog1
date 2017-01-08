@@ -120,7 +120,6 @@ public class Complex {
 	 * Winkel phi.
 	 */
 	public static Complex fromPolar(double r, double phi) {
-		// TODO: diese Methode ist zu implementieren
-		return new Complex();
+		return new Complex(r * Math.cos(phi), r * Math.sin(phi));
 	}
 }
