@@ -82,13 +82,29 @@ public class CubicSpline implements InterpolationMethod {
 	 * berechnet werden muessen.
 	 */
 	public void computeDerivatives() {
-          /* TODO: diese Methode ist zu implementieren */
-          //System.out.println(this.yprime.length);
-          double[] e = new double[this.n];
-          for(int i = this.n-1; i >= 2; i--) {
-            this.e[i] = 3/h * (this.y[i+2] - this.y[i]);
+          //y.length ist mindestens 3
+          double[] d = new double[this.yprime.length-2]; //da 0 und n schon bestimmt
+          //c beschreibt die obere 1er Reihe mit c[c.length-1] = 0, da das zu viel ist
+          double[] c = new double[this.yprime.length-2];
+          d[0] = 3/h * (y[2] - y[0] - h/3 * yprime[0]);
+          d[d.length-1] =3/h * (y[y.length-1] - y[y.length-3] - h/3 * yprime[yprime.length-1]);
+          
+          for(int i = 1; i<y.length-3;i++){
+              //y.length ist mindestens 4
+              d[i] =3/h *  (y[i+2] - y[i]);
           }
-          System.out.println(Arrays.toString(this.yprime));
+          c[0] = 0.25;
+          d[0] = d[0] / 4;
+          for(int i = 1; i< d.length; i++){
+              if(i < d.length-1){
+              c[i] = 1/(4-c[i-1]);
+              }
+              d[i] = (d[i]-d[i-1]) / (4-c[i-1]);
+          }
+          yprime[yprime.length-2] = d[d.length-1];
+          for(int i = yprime.length-3; i>0; i--){
+              yprime[i] = d[i-1] - c[i-1] * yprime[i+1];
+          }  
 	}
 
 	/**
@@ -100,11 +116,32 @@ public class CubicSpline implements InterpolationMethod {
 	@Override
 	public double evaluate(double z) {
           /* TODO: diese Methode ist zu implementieren */
-          // ...
-          int xi = 0;
-          int xn = 0;
-          double t = (z - xi) / (xn - xi);
-
-          return 0.0;
+          double[] x = new double[n+1];
+          x[0] = a;
+          x[n] = b;
+          for(int i = 1; i<n ; i++){
+              x[i] = x[i-1] + h;
+          }
+          int i = 0;
+          if(x[i] >= z){
+              return y[0];
+          }
+          if(x[n] <= z){
+              return y[n];
+          }
+          while (x[i] < z){
+              i++;
+              if(x[i] == z){
+                  return y[i];
+              }
+          }
+          i--;
+          double t = (z-x[i])/(x[i+1]-x[i]);
+          double herm0 = 1 - Math.pow(t,2) + 2 * Math.pow(t,3);
+          double herm1 = 3 * Math.pow(t,2) - 2 * Math.pow(t,3);
+          double herm2 = t - 2 * Math.pow(t,2) + Math.pow(t,3);
+          double herm3 = - Math.pow(t,2) + Math.pow(t,3);
+          double q = y[i] * herm0 + y[i+1] * herm1 + h * yprime[i] * herm2 + h * yprime[i+1] * herm3;
+          return q;
 	}
 }

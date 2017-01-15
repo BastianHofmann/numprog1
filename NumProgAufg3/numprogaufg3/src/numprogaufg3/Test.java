@@ -31,6 +31,7 @@ public class Test {
 		spl.setBoundaryConditions(9, 0);
 		System.out.println(Arrays.toString(spl.getDerivatives())
 				+ " sollte sein: [9.0, -3.0, 3.0, 0.0].");
+                
 	}
 
 	public static void testFFT() {
