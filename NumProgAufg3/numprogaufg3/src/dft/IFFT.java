@@ -22,6 +22,7 @@ public class IFFT {
                     v[0] = c[0];
                 }
                 else{
+                    //m muss gerade sein, da c.length 2er-Potenz und somit gerade
                     int m = c.length/2;
                     Complex[] z1 = new Complex[m];
                     Complex[] z2 = new Complex[m];
@@ -33,19 +34,11 @@ public class IFFT {
                     z2 = ifft(z2);
                     double real_omega  = Math.exp(2*Math.PI*(1/c.length));
                     Complex omega = new Complex(real_omega);
-                    Complex help;
-                    Complex compl_z1;
-                    Complex compl_z2;
                     for(int j=0; j<m; j++){
-                        help = omega.power(j);
-                        compl_z1 = new Complex((z1[j]));
-                        compl_z2 = new Complex((z2[j]));
-                        help = help.mul(compl_z2);
-                        v[j] = compl_z1.add(help);
-                        v[m+j] = compl_z1.sub(help);
+                        v[j] = z1[j].add((omega.power(j)).mul(z2[j]));
+                        v[m+j] = z1[j].sub((omega.power(j)).mul(z2[j]));
                     }
                 }
-		// TODO: diese Methode ist zu implementieren
 		return v;
 	}
 }

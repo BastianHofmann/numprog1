@@ -90,20 +90,32 @@ public class LinearInterpolation implements InterpolationMethod {
 	 */
 	@Override
 	public double evaluate(double z) {
-                if(z < x[0]){
+                // x: Stützstellen
+                // y: Stützwerte
+                //Grenzwerte
+                if(z <= x[0]){
                     return y[0];
                 }
-                else if(z>x[x.length-1]){
+                else if(z>=x[x.length-1]){
                     return y[y.length-1];
                 }
                 // y = m * x + c
                 int j = 0;
                 while(z > x[j]){
+                    //j wird als obere Grenze festgelegt
                     j++;
+                    //Spezialfall: z ist ein Stützpunkt
+                    if(z == x[j]){
+                        return y[j];
+                    }
                 }
+                //i wird untere Grenze
                 int i = j-1;
+                //m : Steigung zwischen den Punkten i und j
                 double m = (y[j]-y[i])/(x[j]-x[i]);
+                //c : Verschiebung nach oben oder unten
                 double c = y[i] - m * x[i];
+                //Wert der Geraden an der Stelle z wird zurückgegeben
 		return m*z+c;
 	}
 
