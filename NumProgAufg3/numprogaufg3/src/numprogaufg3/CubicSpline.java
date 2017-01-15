@@ -137,7 +137,7 @@ public class CubicSpline implements InterpolationMethod {
           }
           i--;
           double t = (z-x[i])/(x[i+1]-x[i]);
-          double herm0 = 1 - Math.pow(t,2) + 2 * Math.pow(t,3);
+          double herm0 = 1 - 3 * Math.pow(t,2) + 2 * Math.pow(t,3);
           double herm1 = 3 * Math.pow(t,2) - 2 * Math.pow(t,3);
           double herm2 = t - 2 * Math.pow(t,2) + Math.pow(t,3);
           double herm3 = - Math.pow(t,2) + Math.pow(t,3);
