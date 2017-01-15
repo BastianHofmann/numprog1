@@ -21,7 +21,7 @@ public class CubicSpline implements InterpolationMethod {
 	/** Stuetzwerte an den aequidistanten Stuetzstellen */
 	double[] y;
 
-	/** zu berechnende Ableitunge an den Stuetzstellen */
+	/** zu berechnende Ableitungen an den Stuetzstellen */
 	double yprime[];
 
 	/**
@@ -82,7 +82,13 @@ public class CubicSpline implements InterpolationMethod {
 	 * berechnet werden muessen.
 	 */
 	public void computeDerivatives() {
-		/* TODO: diese Methode ist zu implementieren */
+          /* TODO: diese Methode ist zu implementieren */
+          //System.out.println(this.yprime.length);
+          double[] e = new double[this.n];
+          for(int i = this.n-1; i >= 2; i--) {
+            this.e[i] = 3/h * (this.y[i+2] - this.y[i]);
+          }
+          System.out.println(Arrays.toString(this.yprime));
 	}
 
 	/**
@@ -93,7 +99,12 @@ public class CubicSpline implements InterpolationMethod {
 	 */
 	@Override
 	public double evaluate(double z) {
-		/* TODO: diese Methode ist zu implementieren */
-		return 0.0;
+          /* TODO: diese Methode ist zu implementieren */
+          // ...
+          int xi = 0;
+          int xn = 0;
+          double t = (z - xi) / (xn - xi);
+
+          return 0.0;
 	}
 }
