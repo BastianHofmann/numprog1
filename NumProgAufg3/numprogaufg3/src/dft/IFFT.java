@@ -32,8 +32,10 @@ public class IFFT {
                     }
                     z1 = ifft(z1);
                     z2 = ifft(z2);
-                    double real_omega  = Math.exp(2*Math.PI*(1/c.length));
-                    Complex omega = new Complex(real_omega);
+                    // cos 2*Math.Pi*1/c.length + i * sin(Math
+                    Complex omega = new Complex(Math.cos(2*Math.PI*1/c.length),Math.sin(2*Math.PI*1/c.length));
+                    //double real_omega  = Math.exp(2*Math.PI*(1/c.length));
+                    //Complex omega = new Complex(real_omega);
                     for(int j=0; j<m; j++){
                         v[j] = z1[j].add((omega.power(j)).mul(z2[j]));
                         v[m+j] = z1[j].sub((omega.power(j)).mul(z2[j]));
