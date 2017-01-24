@@ -16,8 +16,26 @@ public class RungeKutta4 implements Einschrittverfahren {
 	 * Bei der Umsetzung koennen die Methoden addVectors und multScalar benutzt werden.
 	 */
 	public double[] nextStep(double[] y_k, double t, double delta_t, ODE ode) {
-		// TODO: diese Methode ist zu implementieren
-		return Arrays.copyOf(y_k, y_k.length);
+                double[] y_k1;
+		double[] k1;// = Arrays.copyOf(y_k, y_k.length);
+                double[] k2;// = Arrays.copyOf(y_k, y_k.length);
+                double[] k3; // = Arrays.copyOf(y_k, y_k.length);
+                double[] k4; // = Arrays.copyOf(y_k, y_k.length);
+                k1 = multScalar(ode.auswerten(t, y_k),delta_t);
+                double help_t = t + 0.5 * delta_t;
+                double[] help_y = addVectors(y_k, multScalar(k1,0.5));
+                k2 = multScalar(ode.auswerten(help_t, help_y),delta_t);
+                help_y = addVectors(y_k, multScalar(k2, 0.5));
+                k3 = multScalar(ode.auswerten(help_t, help_y),delta_t);
+                help_t = t + delta_t;
+                help_y = addVectors(y_k, k3);
+                k4 = multScalar(ode.auswerten(help_t, help_y),delta_t);
+                y_k1 = addVectors(k1,(multScalar(k2,2)));
+                y_k1 = addVectors(y_k1,(multScalar(k3,2)));
+                y_k1 = addVectors(y_k1,k4);
+                y_k1 = multScalar(y_k1,1.0/6.0);
+                y_k1 = addVectors(y_k, y_k1);
+		return y_k1;
 	}
 
 	/**
