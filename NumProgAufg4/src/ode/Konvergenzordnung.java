@@ -10,15 +10,16 @@ import java.util.Arrays;
 public class Konvergenzordnung {
 	
 	/**
-	 * Festgelegte Differentialgleichung, an der der Konvergenztest durchgeführt wird.
+	 * Festgelegte Differentialgleichung, an der der Konvergenztest durchgefuehrt wird.
 	 */
 	private final ODE testODE;
 	/**
-	 * Startwert bei der Lösung der Differentialgleichung
+	 * Startwert bei der Loesung der Differentialgleichung
+         * 
 	 */
 	private final double[] y0;
 	/**
-	 * Wert der Lösung der Differentialgleichung nach T Sekunden.
+	 * Wert der Loesung der Differentialgleichung nach T Sekunden.
 	 */
 	private final double[] ystar;
 	/**
@@ -63,7 +64,7 @@ public class Konvergenzordnung {
 	}
 	
 	/**
-	 * Berechnet den Fehler in der 2-Norm zwischen der numerischen Lösung yh und der exakten Lösung ystar.
+	 * Berechnet den Fehler in der 2-Norm zwischen der numerischen Loesung yh und der exakten Loesung ystar.
 	 * 
 	 * @return e_h = ||yh - yexact||_2
 	 */
@@ -80,10 +81,10 @@ public class Konvergenzordnung {
 	}
 	
 	/**
-	 * Diese Methode schätzt die Konvergenzordnung des gegebenen Verfahrens ab.
+	 * Diese Methode schaetzt die Konvergenzordnung des gegebenen Verfahrens ab.
 	 * 
 	 * @param verfahren das zu testende Verfahren
-	 * @param h Die Schrittweite h, für die die Abschätzung der Ordnung durchgeführt werden soll.
+	 * @param h Die Schrittweite h, fuer die die Abschaetzung der Ordnung durchgefuehrt werden soll.
 	 * @return Ordnung p
 	 */
 	public double order(Einschrittverfahren verfahren, double h)
