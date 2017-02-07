@@ -90,9 +90,12 @@ public class Konvergenzordnung {
 	public double order(Einschrittverfahren verfahren, double h)
 	{
 		// TODO: diese Methode ist zu implementieren
+                double h1 = h/2;
+                double h2 = h;
 		
-		double p = 0.0;
+                double e1 = this.error(this.integrate(verfahren, h1));
+                double e2 = this.error(this.integrate(verfahren, h2));
 		
-		return p;
+		return Math.log(e1 / e2) / Math.log(h1 / h2);
 	}
 }
